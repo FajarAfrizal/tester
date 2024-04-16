@@ -47,16 +47,20 @@ class PurchaseController extends Controller
         $purchase = Purchase::create([
             'user_id' => Auth::user()->id,
             'customer_id' => $customer->id,
-            'date'=> now(),
+            'date' => now(),
             'total_purchase' => $request->total_purchase,
         ]);
 
         foreach ($request->products as $product) {
-            $purchase->products()->attach($product['product_id'],[
-                    'quantity' => $product['quantity'],
-                    'total_price' => $product['total_price'],
-                    'price' => $product['price'],
-                ]);
+            $purchase->products()->attach($product['product_id'], [
+                'quantity' => $product['quantity'],
+                'total_price' => $product['total_price'],
+                'price' => $product['price'],
+            ]);
+            $productModel = Product::find($product['product_id']);
+            $newStock = $productModel->stock - $product['quantity'];
+            $productModel->update(['stock' => $newStock]);
+
         }
         return redirect()->back();
 
