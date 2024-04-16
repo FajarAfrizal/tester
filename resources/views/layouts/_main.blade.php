@@ -141,26 +141,21 @@
 
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
-            <li class="menu-item">
-                <a href="index.html" class="menu-link">
-                  <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                  <div data-i18n="Analytics">Dashboard</div>
-                </a>
-              </li>
+           
             <li class="menu-item ">
-              <a href="" class="menu-link">
+              <a href="{{ route('pageUser')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-box"></i>
                 <div data-i18n="Analytics">User</div>
               </a>
             </li>
             <li class="menu-item ">
-              <a href="" class="menu-link">
+              <a href="{{ route('pagePurchase')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-cart"></i>
                 <div data-i18n="Analytics">Purchase</div>
               </a>
             </li>
             <li class="menu-item ">
-              <a href="" class="menu-link">
+              <a href="{{ route('pageProduct')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-cube-alt"></i>
                 <div data-i18n="Analytics">Product</div>
               </a>
@@ -251,7 +246,7 @@
                       <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="">
+                      <a class="dropdown-item" href="{{ route('logout')}}">
                         <i class="bx bx-power-off me-2"></i>
                         <span class="align-middle">Log Out</span>
                       </a>

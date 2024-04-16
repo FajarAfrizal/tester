@@ -21,7 +21,8 @@
                                 Login
                             </h2>
 
-                            <form action="" method="post">
+                            <form action="{{ route('authLogin')}}" method="post">
+                                @csrf
                                 <label for="">email</label>
                                 <input type="text" name="email" class="form-control">
                                 <label for="">password</label>

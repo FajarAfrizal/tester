@@ -11,7 +11,15 @@
                         </h2>
                         <a href="" class="btn btn-primary mb-4" data-bs-toggle="modal"
                             data-bs-target="#modalCreate">Create</a>
-                      
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <table class="table">
                             <thead class="thead-dark">
                                 <tr>
@@ -23,24 +31,25 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($product as $item)
                                     <tr>
-                                        <td scope="row"></th>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td scope="row"></td>
+                                        <td>{{$item->name}}</td>
+                                        <td>{{$item->stock}}</td>
+                                        <td>{{$item->price}}</td>
                                         <td>
                                             <div class="d-flex justify-content-start">
                                                 <button class="btn btn-success mx-4" data-bs-toggle="modal"
-                                                    data-bs-target="#modalStock-">
+                                                    data-bs-target="#modalStock-{{$item->id}}">
                                                     <i class='bx bx-plus'></i>Tambah Stock
                                                 </button>
                                                 <button class="btn btn-warning" data-bs-toggle="modal"
-                                                    data-bs-target="#modalEdit-">
+                                                    data-bs-target="#modalEdit-{{$item->id}}">
                                                     <i class='bx bxs-pencil'></i>
                                                 </button>
-                                                <form action=""
-                                                    class="px-4" method="post">
+                                                <form action="{{ route('deleteProduct', ['id' => $item->id ])}}" class="px-4" method="post">
                                                     @csrf
+                                                    @method('delete')
                                                     <button type="submit" class="btn btn-danger"><i
                                                             class='bx bx-trash'></i></button>
                                                 </form>
@@ -48,7 +57,7 @@
                                         </td>
                                     </tr>
                                     <!-- Modal Edit-->
-                                    <div class="modal fade" id="modalEdit-" tabindex="-1"
+                                    <div class="modal fade" id="modalEdit-{{$item->id}}" tabindex="-1"
                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -58,8 +67,7 @@
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body" style="margin-top: -20px;">
-                                                    <form action=""
-                                                        method="post">
+                                                    <form action="{{ route('updateProduct', ['id' => $item->id])}}" method="post">
                                                         @csrf
                                                         @method('PUT')
                                                         <div class="row">
@@ -69,22 +77,22 @@
                                                                             class="text-danger">*</span></label>
                                                                     <input type="text" class="form-control"
                                                                         name="name" aria-label="Name Product"
-                                                                        value="">
+                                                                        value="{{ $item->name}}">
                                                                 </div>
                                                                 <div class="col">
                                                                     <label class="col-md-12">Stock Produk <span
                                                                             class="text-danger">*</span></label>
                                                                     <input type="number" class="form-control"
-                                                                        name="stock" value=""
-                                                                        aria-label="stock" disabled>
+                                                                        name="stock" value="{{$item->stock}}" aria-label="stock"
+                                                                        disabled>
                                                                 </div>
                                                             </div>
                                                             <div class="row g-3">
                                                                 <div class="col">
                                                                     <label class="col-md-12">Price Produk <span
                                                                             class="text-danger">*</span></label>
-                                                                    <input type="text"  class="form-control"
-                                                                        name="price" id="" value=""
+                                                                    <input type="text" class="form-control"
+                                                                        name="price" id="" value="{{$item->price}}"
                                                                         aria-label="price">
                                                                 </div>
                                                             </div>
@@ -100,7 +108,7 @@
                                         </div>
                                     </div>
                                     <!-- Modal Stock-->
-                                    <div class="modal fade" id="modalStock-" tabindex="-1"
+                                    <div class="modal fade" id="modalStock-{{$item->id}}" tabindex="-1"
                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -110,9 +118,9 @@
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body" style="margin-top: -20px;">
-                                                    <form action=""
-                                                        method="post">
+                                                    <form action="{{ route('updateStockProduct', ['id' => $item->id])}}" method="post">
                                                         @csrf
+                                                        @method('PUT')
                                                         <div class="row">
                                                             <div class="row g-3">
                                                                 <div class="col">
@@ -120,7 +128,7 @@
                                                                             class="text-danger">*</span></label>
                                                                     <input type="text" class="form-control"
                                                                         name="name" aria-label="Name Product"
-                                                                        value="" disabled>
+                                                                        value="{{$item->name}}" disabled>
                                                                 </div>
                                                                 <div class="col">
                                                                     <label class="col-md-12">Stock Produk <span
@@ -140,6 +148,8 @@
                                             </div>
                                         </div>
                                     </div>
+                                @endforeach
+
                             </tbody>
                         </table>
                     </div>
@@ -154,7 +164,7 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body" style="margin-top: -20px;">
-                                    <form action="" method="post">
+                                    <form action="{{ route('addProduct') }}" method="post">
                                         @csrf
                                         <div class="row">
                                             <div class="row g-3">
@@ -169,8 +179,8 @@
                                             </div>
                                             <div class="row g-3">
                                                 <div class="col">
-                                                    <input type="text" class="form-control" id="rupiah2" name="price"
-                                                        placeholder="price" aria-label="price">
+                                                    <input type="text" class="form-control" id="rupiah2"
+                                                        name="price" placeholder="price" aria-label="price">
                                                 </div>
                                             </div>
                                         </div>
@@ -188,5 +198,5 @@
             </div>
         </div>
     </div>
-   
+
 @endsection
